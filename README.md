@@ -64,10 +64,10 @@ end
 
 ## TODO
 
-[x] - Query
-[ ] - Alter
-[ ] - Mutations
-[ ] - Transactions
+- [x] Query
+- [ ] Alter
+- [ ] Mutations
+- [ ] Transactions
 
 ## Contributing
 
