@@ -20,11 +20,54 @@ Dgraph client using HTTP API
 require "dgraph"
 ```
 
-TODO: Write usage instructions here
+### Query
 
-## Development
+```crystal
+require "dgraph"
 
-TODO: Write development instructions here
+class Test
+  class Movie
+    JSON.mapping(
+      name: String
+    )
+  end
+
+  JSON.mapping(
+    movie: Array(Movie)
+  )
+end
+
+client = Dgraph::Pooled.new
+
+res = client.query(%(
+    query test($name: string) {
+      movie(func: allofterms(name, $name)) {
+        name
+      }
+    }
+), {"$name" => "Star Wars"})
+
+result = Dgraph::QueryResult(Test).from_json(res)
+
+if result.errors.empty?
+  result.data.try do |data|
+    data.movie.each do |mov|
+      pp mov.name
+    end
+  end
+else
+  result.errors.each do |err|
+    pp err.code
+  end
+end
+```
+
+## TODO
+
+[x] - Query
+[ ] - Alter
+[ ] - Mutations
+[ ] - Transactions
 
 ## Contributing
 
