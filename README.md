@@ -2,6 +2,10 @@
 
 Dgraph client using HTTP API
 
+## Status
+
+This library still under development, and the API may change completely, contributions and suggestions are welcomed.
+
 ## Installation
 
 1. Add the dependency to your `shard.yml`:
@@ -62,10 +66,34 @@ else
 end
 ```
 
+### Alter
+
+```crystal
+require "dgraph"
+
+client = Dgraph::Pooled.new
+
+res = client.alter(%(
+  name: string @index(term) .
+))
+
+if res.success?
+  res.data.try do |data|
+    pp data.message
+  end
+end
+
+if res.fail?
+  res.errors.each do |err|
+    pp err.message
+  end
+end
+```
+
 ## TODO
 
 - [x] Query
-- [ ] Alter
+- [x] Alter
 - [ ] Mutations
 - [ ] Transactions
 

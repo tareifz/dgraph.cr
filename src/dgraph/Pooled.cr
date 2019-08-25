@@ -1,6 +1,7 @@
 require "pool/connection"
 
 require "./Operation"
+require "./AlterResult"
 
 class Dgraph::Pooled
   include Operation
@@ -20,6 +21,14 @@ class Dgraph::Pooled
   def query(q : String, vars = {} of String => String) : String
     conn = @pool.checkout
     res = conn.query(q, vars)
+    @pool.checkin(conn)
+
+    res
+  end
+
+  def alter(q : String) : AlterResult
+    conn = @pool.checkout
+    res = conn.alter(q)
     @pool.checkin(conn)
 
     res

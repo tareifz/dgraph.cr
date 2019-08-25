@@ -2,6 +2,7 @@ require "http/client"
 require "uri"
 
 require "./Operation"
+require "./AlterResult"
 
 class Dgraph::Client
   include Operation
@@ -27,6 +28,15 @@ class Dgraph::Client
 
     res.body
 
+  end
+
+  def alter(q : String) : AlterResult
+    res = @connection.post(
+      "/alter",
+      body: q
+    )
+
+    AlterResult.from_json(res.body)
   end
 
 end
